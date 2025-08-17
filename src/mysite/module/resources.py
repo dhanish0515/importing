@@ -63,6 +63,22 @@ class ProductVariantResource(resources.ModelResource):
                     row[field] = None
 
 
+class ProductVariantWidget(widgets.ForeignKeyWidget):
+    def clean(self, value=None, row=None, **kwargs):
+        #Assuming CSV has both columns:  "variant_name"
+        variant_name = (row.get("product_variant") or "").strip() #variant_name coloumn in CSV
+
+        if not variant_name:
+            raise Exception(f"Missing product_variant in row: {row}")
+
+        variant = ProductVariant.objects.filter(variant_name=variant_name).first()
+
+        if not variant:
+            raise Exception(f"No ProductVariant found for variant_name={variant_name}")
+
+        return variant
+
+
 class DurationTypeResources(resources.ModelResource):
     class Meta:
         model = DurationType
@@ -73,13 +89,13 @@ class PriceVariantResource(resources.ModelResource):
     product_variant = fields.Field(
         column_name='product_variant',
         attribute='product_variant',
-        widget=ForeignKeyWidget(ProductVariant, 'id')
+        widget=ProductVariantWidget(ProductVariant, 'variant_name')
     )
 
     duration_type = fields.Field(
         column_name='duration_type',
         attribute='duration_type',
-        widget=ForeignKeyWidget(DurationType, 'duration_id')
+        widget=ForeignKeyWidget(DurationType, 'name')
     )
 
     class Meta:
