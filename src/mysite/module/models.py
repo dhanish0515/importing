@@ -39,7 +39,7 @@ class ProductVariant(models.Model):
         ordering = ('product__name', 'variant_name')
 
     def __str__(self):
-        return f'{self.product.name} - {self.variant_name} - {self.country}'
+        return f'{self.product.name} - {self.variant_name}'
 
 
 class DurationType(models.Model):
@@ -60,6 +60,8 @@ class PriceVariant(models.Model):
     duration_type = models.ForeignKey(DurationType, on_delete=models.CASCADE, db_column='duration_id')
     price = models.DecimalField(max_digits=100, decimal_places=2)
     selling_price = models.DecimalField(max_digits=15, decimal_places=2)
+    country = CountryField(default="IN")
+
 
     class Meta:
         verbose_name = 'Price Variant'
@@ -67,5 +69,5 @@ class PriceVariant(models.Model):
         ordering = ('product_variant__product__name', 'product_variant__variant_name')
 
     def __str__(self):
-        return f'{self.product_variant} - {self.duration_type}'
+        return f'{self.product_variant.product.name} - {self.product_variant.variant_name} - {self.duration_type}'
 

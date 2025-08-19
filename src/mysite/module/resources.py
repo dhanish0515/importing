@@ -106,8 +106,10 @@ class PriceVariantResource(resources.ModelResource):
             'duration_type',
             'price',
             'selling_price',
+            'country',
         )
         import_id_fields = ('id',)
+
 
     def before_import_row(self, row, **kwargs):
         decimal_fields = ['price', 'selling_price']

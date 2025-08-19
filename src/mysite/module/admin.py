@@ -32,8 +32,8 @@ class DurationTypeAdmin(ImportExportModelAdmin):
 @admin.register(PriceVariant)
 class PriceVariantAdmin(ImportExportModelAdmin):
     resource_class = PriceVariantResource
-    list_display = ('product_variant', 'duration_type', 'price', 'selling_price')
+    list_display = ('product_variant', 'duration_type', 'price', 'selling_price', 'country')
     search_fields = ('product_variant__product__name', 'product_variant__variant_name')
-    list_filter = ('duration_type',)
+    list_filter = ('duration_type', 'country')
 
 
